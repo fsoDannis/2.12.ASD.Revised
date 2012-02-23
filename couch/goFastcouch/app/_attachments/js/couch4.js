@@ -46,7 +46,7 @@ $('#racerDetail').live("pageshow", function(){
        		 	
 
 		         $('<li data-role="divider"><h3>'+ fullName + '</h3></li>' +
-		         '<li>'+ "Racing on: " + raceDate +'</li>' +
+		         '<li><a>'+ "Racing on: " + raceDate +'</a></li>' +
 		         '<li>'+ classType +'</li>' +
 		         '<li>'+ age +'</li>' +
 		         '<li>'+ comments +'</li>' +
@@ -54,9 +54,7 @@ $('#racerDetail').live("pageshow", function(){
 		         ' | <a href="#" id="delete-racer-link" onclick="deleteItem()">Delete Racer</a></p>'
 		         ).appendTo('#racerDetails');
 		        },
-		     error: function(status) {
-		        console.log(status);
-		     }
+	
 	});
 	$('#racerDetails').listview('refresh');
 });
