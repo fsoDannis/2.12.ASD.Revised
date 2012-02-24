@@ -70,11 +70,10 @@ $('#edit-racer-link').bind('click', function(){
 	var racer = urlVars()["racer"];
 	var key = "racer:" + racer;
 	console.log("key" + key);
-	window.location = 'addRacer.html';
-	location.reload();
+	$.mobile.changePage("addRacer.html");
 		$.couch.db("gofast").openDoc(key, {
 		     success: function(data) {
-		     	nickName:nickName;
+		     	nickName:data.nickName;
     			firstName:data.firstName;
 		    	lastName:data.lastName;
 		        classType: data.classType;
@@ -98,15 +97,27 @@ $('#edit-racer-link').bind('click', function(){
 				
 				$('#edit-item').bind('click', function(){
 				console.log("edit-item button was pressed");
-				data.nickName=$('#nickName').val();
-    			data.firstName=$('#firstName').val();
-		    	data.lastName=$('#lastName').val();
-		        data.classType=$('#raceClass').val();
-				data.age=$('#age').val();
-		        data.newToTrack=$('#raceClass').val();
-		        data.comments=$('#anyComments').val();
-		        data.raceDate=$('#raceDate').val();
-
+					data.nickName=$('#nickName').val(nickName);
+	    			data.firstName=$('#firstName').val(firstName);
+			    	data.lastName=$('#lastName').val(lastName);
+			        data.classType=$('#raceClass').val(classType);
+					data.age=$('#age').val(age);
+			        data.newToTrack=$('#raceClass').val(newToTrack);
+			        data.comments=$('#anyComments').val(comments);
+			        data.raceDate=$('#raceDate').val(raceDate);
+					var item = {
+					
+					"_id": "racer:" + nickName,
+					"_rev": data._rev,
+					"firstName": firstName,
+					"lastName": lastName,
+					"age": age,
+					"classType": classType,
+			    	"newToTrack": newToTrack,
+			    	"raceDate": raceDate,
+			        "comments": comments
+					};
+					console.log(item);
 		
 				$.couch.db("gofast").saveDoc(key, {
 					success: function(data) {
