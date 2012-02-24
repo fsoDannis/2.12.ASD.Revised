@@ -40,7 +40,7 @@ var urlVars = function() {
 
 $('#racerDetail').live("pageshow", function(){
 	var racer = urlVars()["racer"];
-	var key = "racer: " + racer;
+	var key = "racer:" + racer;
 		$.couch.db("gofast").openDoc(key, {
 		     success: function(data) {
 		        fullName = data.firstName + " " + data.lastName;
@@ -179,6 +179,7 @@ $('#submit').bind('click', function(){
 		success: function(data) {
 		console.log(data);
 		alert("Welcome to the Track!");
+		document.location.href = 'index.html#race_record'
 		},
 	error: function(status) {
 		console.log(status);
