@@ -1,24 +1,27 @@
-//Function to add same list to Maps -- just needed a spot
+/////////////////// COUCH WEEK 4 ///////////////////////
+//___________________________________________________\\
+/////////////////// VIEW RACERS ///////////////////////
 
-$('#directions_map').live("pageshow", function(){
+$('#race_record').live("pageshow", function(){
 	$.couch.db("gofast").view("newgofast/racer",{
 		success: function(data){
-			$('#couch4Data').empty();
+			$('#r_names').empty();
 			$.each(data.rows, function(index, racer){
 				var nickName = racer.value.nickName;
-				$('#couch4Data').append(
+				$('#r_names').append(
 					$('<li>').append(
 						$('<a>').attr("href","racerDetail.html?racer="+ nickName)
 							.text(nickName)
 					)
 				);
 			});
-			$('#couch4Data').listview('refresh');
+			$('#r_names').listview('refresh');
 		}
 	});				
 });
 
-//function -- STRING MANIPULATION FOR INFO NAME
+/////////////////// GET URL or KEY ///////////////////////
+
 var urlVars = function() {
 	var urlData = $($.mobile.activePage).data("url");
 	var urlParts = urlData.split('?');
@@ -33,6 +36,8 @@ var urlVars = function() {
 	return urlValues;
 };  
 
+/////////////////// RACER DETAILS ///////////////////////
+
 $('#racerDetail').live("pageshow", function(){
 	var racer = urlVars()["racer"];
 	var key = "racer: " + racer;
@@ -44,9 +49,9 @@ $('#racerDetail').live("pageshow", function(){
        			comments= "Comments: " + data.comments;
        		 	raceDate=  data.raceDate;
        		 	
-
+																					//CANNOT GET A LISTVIEW LOOK OUT OF THIS THING!!!
 		         $('<li data-role="divider"><h3>'+ fullName + '</h3></li>' +
-		         '<li><a>'+ "Racing on: " + raceDate +'</a></li>' +
+		         '<li>'+ "Racing on: " + raceDate +'</li>' +
 		         '<li>'+ classType +'</li>' +
 		         '<li>'+ age +'</li>' +
 		         '<li>'+ comments +'</li>' +
@@ -57,4 +62,72 @@ $('#racerDetail').live("pageshow", function(){
 	
 	});
 	$('#racerDetails').listview('refresh');
+});
+
+
+/////////////////// NEW DELETE ITEMS FUNCTION ///////////////////////
+function deleteItem(id){
+	var racer = urlVars()["racer"];
+	var key = "racer:" + racer;
+	$.couch.db("gofast").openDoc(key, {
+	     success: function(data) {
+	     	console.log(key);
+			var ask = confirm("There will be no race'n for you?");
+			if(ask){
+				$.couch.db("gofast").removeDoc(key, {
+					success: function(data) {
+					console.log(data);
+					},
+				error: function(status) {
+				console.log(status);
+				}
+			});
+		}else{
+			alert("Let's Race!");
+			}
+		}
+	});
+	window.location = 'index.html';
+}
+
+
+
+/////////////////// NEW SAVE ITEMS FUNCTION ///////////////////////
+
+$('#submit').bind('click', function(){
+	var nickName = $('#nickName').val();
+	var firstName = $('#firstName').val();
+	var lastName = $('#lastName').val();
+	var age = $('#age').val();
+	var classType = $('#raceClass').val();
+	var newToTrack = $('#new2Track:checked').val();
+		if(newToTrack == "on"){ 
+		var newToTrack = "Yes" 
+	}else{
+		var newToTrack = "No" 
+		}
+	var raceDate = $('#raceDate').val();
+	var comments = $('#anyComments').val();
+	var doc = {
+		"_id": "racer:" + nickName,
+		"firstName": firstName,
+		"lastName": lastName,
+		"age": age,
+		"classType": classType,
+    	"newToTrack": newToTrack,
+    	"raceDate": raceDate,
+        "comments": comments
+        };
+	console.log(doc);
+	$.couch.db("gofast").saveDoc(doc, {
+		success: function(data) {
+		console.log(data);
+		alert("Welcome to the Track!");
+		},
+	error: function(status) {
+		console.log(status);
+		alert("Whoops!!! We must of missed something!");
+		}
+	});
+	return false;
 });
