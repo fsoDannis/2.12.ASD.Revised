@@ -65,6 +65,62 @@ $('#racerDetail').live("pageshow", function(){
 });
 
 
+/////////////////// NEW EDIT RACING INFO FUNCTION ///////////////////////
+$('#edit-racer-link').bind('click', function(){
+	var racer = urlVars()["racer"];
+	var key = "racer:" + racer;
+	console.log("key" + key);
+	window.location = 'addRacer.html';
+	location.reload();
+		$.couch.db("gofast").openDoc(key, {
+		     success: function(data) {
+		     	nickName:nickName;
+    			firstName:data.firstName;
+		    	lastName:data.lastName;
+		        classType: data.classType;
+				age: data.age;
+		        newToTrack: data.newToTrack;
+		        comments: data.comments;
+		        raceDate: data.raceDate;
+		     	 $('#nickName').val();
+				 $('#firstName').val();
+				 $('#lastName').val();
+				 $('#age').val();
+				 $('#raceClass').val();
+				 $('#new2Track:checked').val();
+				 $('#raceDate').val();
+				 $('#anyComments').val();
+				 				
+				var editButton = $('#edit-item-button').css('display', 'block');
+				var subresButtons = $('#submit-reset-buttons').css('display', 'none');
+				var itemList = $('#list').css('display', 'none');
+				
+				
+				$('#edit-item').bind('click', function(){
+				console.log("edit-item button was pressed");
+				data.nickName=$('#nickName').val();
+    			data.firstName=$('#firstName').val();
+		    	data.lastName=$('#lastName').val();
+		        data.classType=$('#raceClass').val();
+				data.age=$('#age').val();
+		        data.newToTrack=$('#raceClass').val();
+		        data.comments=$('#anyComments').val();
+		        data.raceDate=$('#raceDate').val();
+
+		
+				$.couch.db("gofast").saveDoc(key, {
+					success: function(data) {
+						console.log(data);
+						},
+					error: function(status) {
+				         console.log(status);
+				     }
+				});
+			});
+			}
+		});
+});
+
 /////////////////// NEW DELETE ITEMS FUNCTION ///////////////////////
 function deleteItem(id){
 	var racer = urlVars()["racer"];
