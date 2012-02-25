@@ -73,7 +73,7 @@ $('#edit-racer-link').bind('click', function(){
 	$.mobile.changePage("addRacer.html");
 		$.couch.db("gofast").openDoc(key, {
 		     success: function(data) {
-		     	nickName:data.nickName;
+		     	nickName:data._id.substr(6);
     			firstName:data.firstName;
 		    	lastName:data.lastName;
 		        classType: data.classType;
@@ -97,7 +97,7 @@ $('#edit-racer-link').bind('click', function(){
 				
 				$('#edit-item').bind('click', function(){
 				console.log("edit-item button was pressed");
-					data.nickName=$('#nickName').val(nickName);
+					data._id.substr(6)=$('#nickName').val(nickName);
 	    			data.firstName=$('#firstName').val(firstName);
 			    	data.lastName=$('#lastName').val(lastName);
 			        data.classType=$('#raceClass').val(classType);
