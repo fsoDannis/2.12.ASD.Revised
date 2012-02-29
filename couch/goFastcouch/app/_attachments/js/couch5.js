@@ -90,7 +90,7 @@ $('#racerDetail').live("pageshow", function(){
 
 
 /////////////////// NEW EDIT RACING INFO FUNCTION ///////////////////////
-$('#edit-racer-link').bind('click', function(){
+$('#edit-racer-link').live('click', function(){
 	var racer = urlVars()["racer"];
 	$.mobile.changePage("index.html#racerCheckInPage");
 		$.couch.db("gofast").openDoc(racer, {
