@@ -9,17 +9,16 @@ $('#race_record').live("pageshow", function(){
 			$.each(data.rows, function(index, value){
 				var id = value.id;
 				var item = (value.value || value.doc);
-				var nickName = value.value.nickName;
 				$('#r_names').append(
 					$('<li>').append(
-						$('<a>').attr("href","racerDetail.html?racer="+ id)
-							.text(nickName)
+					$('<a>').attr("href","racerDetail.html?racer="+ id)
+					.html('<h3>'+item.nickName+'</h3>')
 					)
 				);
 			});
-			$('#r_names').listview('refresh');
+		$('#r_names').listview('refresh');
 		}
-	});				
+	});
 });
 
 /////////////////// GET URL or KEY ///////////////////////
@@ -93,23 +92,21 @@ $('#racerDetail').live("pageshow", function(){
 /////////////////// NEW EDIT RACING INFO FUNCTION ///////////////////////
 $('#edit-racer-link').bind('click', function(){
 	var racer = urlVars()["racer"];
-	$.mobile.changePage("addRacer.html");
+	$.mobile.changePage("index.html#racerCheckInPage");
 		$.couch.db("gofast").openDoc(racer, {
 		     success: function(data) {
-		     	nickName = data._id.substr(6);
+		     	nickName = data.nickName;
     			firstName = data.firstName;
 		    	lastName = data.lastName;
 		        classType = data.classType;
 				age = data.age;
-		        newToTrack = data.newToTrack;
 		        comments = data.comments;
 		        raceDate = data.raceDate;
 		     	 $('#nickName').val(nickName);
 				 $('#firstName').val(firstName);
 				 $('#lastName').val(lastName);
 				 $('#age').val(age);
-				 $('#raceClass').val(raceClass).selectmenu('refresh', true);
-				 $('#new2Track:checked').val(new2Track);
+				 $('#classType').val(classType).selectmenu('refresh', true);
 				 $('#raceDate').val(raceDate);
 				 $('#anyComments').val(anyComments);
 				 				
@@ -120,22 +117,22 @@ $('#edit-racer-link').bind('click', function(){
 				
 				$('#edit-item').bind('click', function(){
 				console.log("edit-item button was pressed");
+					var nickName=$('nickName').val();
 	    			var firstName = $('#firstName').val();
 			    	var lastName = $('#lastName').val();
-			        var raceClass = $('#raceClass').val();
+			        var classType = $('#classType').val();
 					var age = $('#age').val();
-			        var newToTrack = $('#newToTrack').val();
 			        var comments = $('#anyComments').val();
 			        var raceDate = $('#raceDate').val();
 					var item = {
 					
 					"_id": data._id,
 					"_rev": data._rev,
+					"nickName": nickName,
 					"firstName": firstName,
 					"lastName": lastName,
 					"age": age,
-					"raceClass": raceClass,
-			    	"newToTrack": newToTrack,
+					"classType": classType,
 			    	"raceDate": raceDate,
 			        "comments": comments
 					};
@@ -170,22 +167,16 @@ $('#submit').bind('click', function(){
 	var firstName = $('#firstName').val();
 	var lastName = $('#lastName').val();
 	var age = $('#age').val();
-	var raceClass = $('#raceClass').val();
-	var newToTrack = $('#new2Track:checked').val();
-		if(newToTrack == "on"){ 
-		newToTrack = "Yes" ;
-	}else{
-		newToTrack = "No" ;
-		}
+	var classType = $('#classType').val();
 	var raceDate = $('#raceDate').val();
 	var comments = $('#anyComments').val();
 	var item = {
-		"_id": "racer:" + raceClass + ":" + myid,
+		"_id": "racer:" + nickName + ":" + myid,
+		"nickName": nickName,
 		"firstName": firstName,
 		"lastName": lastName,
 		"age": age,
-		"raceClass": raceClass,
-    	"newToTrack": newToTrack,
+		"classType": classType,
     	"raceDate": raceDate,
         "comments": comments
         };
