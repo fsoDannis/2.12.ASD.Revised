@@ -117,7 +117,7 @@ $('#edit-racer-link').bind('click', function(){
 				
 				$('#edit-item').bind('click', function(){
 				console.log("edit-item button was pressed");
-					var nickName=$('nickName').val();
+					var nickName = $('#nickName').val();
 	    			var firstName = $('#firstName').val();
 			    	var lastName = $('#lastName').val();
 			        var classType = $('#classType').val();
